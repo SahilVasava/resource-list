@@ -34,7 +34,7 @@ const GoogleBtn = () => {
         }
     }, []) */
     const handleLoginFailure = (response) => {
-        console.log('Failed to log in')
+        console.log('Failed to log in', response)
     }
 
     const handleLogoutFailure = (response) => {
@@ -55,7 +55,8 @@ const GoogleBtn = () => {
                     onSuccess={login}
                     onFailure={handleLoginFailure}
                     cookiePolicy={'single_host_origin'}
-                    responseType='code,token'
+                    responseType='code'
+                    redirectUri='postmessage'
                 />
             }
 
