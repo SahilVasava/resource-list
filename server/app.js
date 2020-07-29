@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const helmet = require('helmet')
 const passport = require('passport');
 
-const { authRoute } = require('./routes');
+const { authRoute, usersRoute } = require('./routes');
 
 const db = require('./db');
 
@@ -24,7 +24,25 @@ app.use(passport.initialize());
 
 // Routes
 app.use('/auth', authRoute);
+app.use('/user', usersRoute);
 
 
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    const err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+// Error Handling
+app.use((err, req, res, next) => {
+    console.log("err handler", err);
+    res.status(err.status || 500);
+    res.json({
+        status: "error",
+        statusCode: err.status || 500,
+        message: err.message
+    })
+});
 
 module.exports = app;

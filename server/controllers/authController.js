@@ -26,9 +26,9 @@ module.exports = {
                 await user.save();
                 console.log('newUser', user);
             }
-            let token = await signToken(user);
+            let tokenData = await signToken(user);
 
-            res.status(200).json({ token });
+            res.status(200).json({ tokenData });
 
         } catch (error) {
             next(error)

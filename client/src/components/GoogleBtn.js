@@ -1,38 +1,48 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useCallback } from 'react';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
-// import { AuthContext } from '../contexts/authContext';
+import googleAuth from '../api/googleAuth';
+import { AuthContext } from '../contexts/authContext';
+
 
 const GoogleBtn = () => {
 
 
-    // const { isLoggedIn, setAccessToken, setIsLoggedIn } = useContext(AuthContext);
-    const [isLoggedIn, _] = useState(false)
+    const { isAuthenticated, setToken, setIsAuthenticated } = useContext(AuthContext);
+
 
     const login = (loginRes) => {
         console.log(loginRes);
-        if (loginRes.accessToken) {
-            /* localStorage.setItem('access_token', JSON.stringify({ 'token': loginRes.accessToken, 'expires_at': loginRes.tokenObj.expires_at }));
-            setIsLoggedIn(true);
-            setAccessToken(loginRes.accessToken); */
+        if (loginRes.code) {
+            googleAuth.googleLogin(loginRes.code).then((res) => {
+                console.log(res);
+                localStorage.setItem('token', JSON.stringify({ 'token': res.tokenData.token, 'expires_at': res.tokenData.exp }));
+                setIsAuthenticated(true);
+                setToken(res.tokenData);
+            })
         }
     }
 
-    const logout = (response) => {
-        console.log(response);
-        /* localStorage.removeItem('access_token');
-        setIsLoggedIn(false);
-        setAccessToken(''); */
-    }
-    /* useEffect(() => {
-        let access_token = JSON.parse(localStorage.getItem('access_token'));
-        if (access_token && new Date(access_token.expires_at) >= new Date()) {
-            setIsLoggedIn(true);
-            console.log(access_token);
-            setAccessToken(access_token.token);
+    const logout = useCallback((response) => {
+
+        localStorage.removeItem('token');
+        setIsAuthenticated(false);
+        setToken('');
+    }, [setIsAuthenticated, setToken]);
+
+    useEffect(() => {
+
+        let token = JSON.parse(localStorage.getItem('token'));
+
+        if (token && new Date(token.expires_at).getTime() >= new Date().getTime()) {
+            setIsAuthenticated(true);
+            setToken(token);
+
         } else {
             logout();
         }
-    }, []) */
+
+    }, [setIsAuthenticated, setToken, logout]);
+
     const handleLoginFailure = (response) => {
         console.log('Failed to log in', response)
     }
@@ -42,16 +52,18 @@ const GoogleBtn = () => {
     }
     return (
         <div>
-            {isLoggedIn ?
+            {isAuthenticated ?
                 <GoogleLogout
                     clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
                     buttonText='Logout'
                     onLogoutSuccess={logout}
                     onFailure={handleLogoutFailure}
+                // theme='dark'
                 >
                 </GoogleLogout> : <GoogleLogin
                     clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
                     buttonText='Login'
+                    // theme='dark'
                     onSuccess={login}
                     onFailure={handleLoginFailure}
                     cookiePolicy={'single_host_origin'}

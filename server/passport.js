@@ -25,7 +25,8 @@ passport.use(new GoogleAuthCodeStrategy({
 
 // JSON WEB TOKENS STRATEGY
 passport.use(new JwtStrategy({
-    jwtFromRequest: ExtractJwt.fromHeader('authorization'),
+    // jwtFromRequest: ExtractJwt.fromHeader('authorization'),
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.JWT_SECRET,
     passReqToCallback: true
 }, async (req, payload, done) => {
