@@ -2,15 +2,18 @@ import React, { useContext, useEffect, useCallback } from 'react';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import googleAuth from '../api/googleAuth';
 import { AuthContext } from '../contexts/authContext';
+import { MenuItem, useMediaQuery } from '@material-ui/core/';
+import { useTheme } from '@material-ui/core/styles';
 
+const GoogleBtn = (props) => {
 
-const GoogleBtn = () => {
-
-
+    const theme = useTheme();
+    const isXsDown = useMediaQuery(theme.breakpoints.down('xs'));
     const { isAuthenticated, setToken, setIsAuthenticated } = useContext(AuthContext);
 
 
     const login = (loginRes) => {
+        props.dialogClose();
         console.log(loginRes);
         if (loginRes.code) {
             googleAuth.googleLogin(loginRes.code).then((res) => {
@@ -58,6 +61,10 @@ const GoogleBtn = () => {
                     buttonText='Logout'
                     onLogoutSuccess={logout}
                     onFailure={handleLogoutFailure}
+                    render={isXsDown ? renderProps => (
+
+                        <MenuItem onClick={renderProps.onClick} disabled={renderProps.disabled}>Logout</MenuItem>
+                    ) : null}
                 // theme='dark'
                 >
                 </GoogleLogout> : <GoogleLogin

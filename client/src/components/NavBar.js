@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
     Link
 } from "react-router-dom";
@@ -6,10 +6,10 @@ import {
 import { AppBar, Toolbar, Grid, Button, Menu, MenuItem, IconButton, Hidden, Dialog, DialogTitle, DialogContent } from '@material-ui/core/';
 import MenuIcon from '@material-ui/icons/Menu';
 // import { AccountCircle } from '@material-ui/icons'
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography'
 import GoogleBtn from './GoogleBtn';
-// import { AuthContext } from '../contexts/authContext';
+import { AuthContext } from '../contexts/authContext';
 
 
 
@@ -22,7 +22,10 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
 
-        textTransform: "uppercase"
+        textTransform: "uppercase",
+        [theme.breakpoints.down('sm')]: {
+            flexGrow: 1
+        }
     },
     navbar: {
         flexGrow: 1,
@@ -31,6 +34,13 @@ const useStyles = makeStyles((theme) => ({
     navButton: {
         fontWeight: theme.typography.fontWeightLight,
         /* fontSize: theme.typography. */
+    },
+    dialogContent: {
+        marginBottom: '1em'
+    },
+    toolbar: {
+
+        justifyContent: 'space-between'
     }
 }));
 
@@ -40,9 +50,12 @@ const NavBar = (props) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [open, setOpen] = React.useState(false);
+    const { isAuthenticated, setToken, setIsAuthenticated } = useContext(AuthContext);
 
     const handleDialogClickOpen = () => {
         setOpen(true);
+        setAnchorEl(null);
+
     };
 
     const handleDialogClose = () => {
@@ -52,7 +65,6 @@ const NavBar = (props) => {
 
 
 
-    // const { isAuthenticated } = useContext(AuthContext);
     /* const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleMenu = (event) => {
@@ -100,13 +112,46 @@ const NavBar = (props) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const authButton = (
+
+        isAuthenticated ? <GoogleBtn dialogClose={handleDialogClose} /> :
+            <Button size="large" variant="outlined" onClick={handleDialogClickOpen} className={classes.navButton}>
+                Login/Signup
+                        </Button>
+    )
+    const authMenuButton = (
+
+        isAuthenticated ? <GoogleBtn dialogClose={handleDialogClose}
+            render={renderProps => (
+
+                <MenuItem onClick={renderProps.onClick} disabled={renderProps.disabled}>Logout</MenuItem>
+            )}
+        /> :
+            <MenuItem onClick={handleDialogClickOpen}>Login/Signup</MenuItem>
+    )
+    useEffect(() => {
+
+        let token = JSON.parse(localStorage.getItem('token'));
+
+        if (token && new Date(token.expires_at).getTime() >= new Date().getTime()) {
+            setIsAuthenticated(true);
+            setToken(token);
+
+        } else {
+            localStorage.removeItem('token');
+            setIsAuthenticated(false);
+            setToken('');
+        }
+
+    }, [setIsAuthenticated, setToken]);
     return (
 
         <div className={classes.root}>
             <Grid item>
                 <AppBar color="default" position="static">
 
-                    <Toolbar>
+                    <Toolbar className={classes.toolbar}>
 
                         <Button variant="text" component={Link} to="/">
                             <Typography variant="h6" color="inherit" className={classes.title}>
@@ -140,22 +185,25 @@ const NavBar = (props) => {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Create</MenuItem>
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-
+                                <MenuItem onClick={handleClose} component={Link} to="/create">Create</MenuItem>
+                                <MenuItem onClick={handleClose} component={Link} to="/profile">Profile</MenuItem>
+                                {authMenuButton}
                             </Menu>
                         </Hidden>
-                        <Button size="large" variant="outlined" onClick={handleDialogClickOpen} className={classes.navButton}>
-                            Login/Signup
-                        </Button>
+                        <Hidden xsDown implementation="js">
+                            {authButton}
+                        </Hidden>
+
                         <Dialog
                             open={open}
                             onClose={handleDialogClose}
                         >
                             <DialogTitle>Login with:</DialogTitle>
-                            <DialogContent>
+                            <DialogContent
+                                className={classes.dialogContent}
+                            >
 
-                                <GoogleBtn />
+                                <GoogleBtn dialogClose={handleDialogClose} />
                             </DialogContent>
                         </Dialog>
                     </Toolbar>
