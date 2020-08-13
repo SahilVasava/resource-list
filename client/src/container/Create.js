@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Button, Paper, TextField, Typography, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
-
+import resourceList from '../api/resourceList';
+import { AuthContext } from '../contexts/authContext';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -29,6 +30,7 @@ const Create = () => {
     const classes = useStyles();
     const [subject, setSubject] = useState('');
     const [resource, setResource] = useState([]);
+    const { isAuthenticated, token, setToken, setIsAuthenticated } = useContext(AuthContext);
     const handleCatChange = (index, event) => {
         /* let newRes = [...resource];
         newRes[index] = { ...newRes[index], cat: event.target.value }
@@ -56,9 +58,27 @@ const Create = () => {
         setResource([...resource, { cat: '', link: '' }]);
     }
 
+    const removeResource = (index) => {
+        setResource(resource.filter((item, ind) =>
+            ind !== index
+
+        ))
+    }
+
     const submitResourceList = (e) => {
         e.preventDefault();
-        console.log(subject, resource)
+        console.log(subject, resource);
+        resourceList.createList(
+            {
+                title: subject,
+                resources: resource
+            },
+            token.token
+        ).then((res) => {
+            setSubject('');
+            setResource([]);
+            console.log(res);
+        })
     }
 
     return (
@@ -91,11 +111,14 @@ const Create = () => {
                                 return (
                                     <div className={classes.resForm} key={index}>
                                         <FormControl
+
+                                            required
                                             margin="normal"
                                             className={classes.formControl}>
                                             <InputLabel >Category</InputLabel>
                                             <Select
 
+                                                required
                                                 value={item.cat}
                                                 onChange={(e) => handleCatChange(index, e)}
                                             >
@@ -112,6 +135,8 @@ const Create = () => {
                                             margin="normal"
                                             className={classes.formControl}>
                                             <TextField
+
+                                                required
                                                 fullWidth
                                                 id="link"
                                                 label="Link"
@@ -119,6 +144,9 @@ const Create = () => {
                                                 value={item.link}
                                                 onChange={(e) => handleLinkChange(index, e)}
                                             />
+                                        </FormControl>
+                                        <FormControl>
+                                            <Button color="primary" onClick={() => removeResource(index)} variant="contained">Remove</Button>
                                         </FormControl>
                                     </div>
                                 )

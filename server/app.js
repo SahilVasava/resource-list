@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const helmet = require('helmet')
 const passport = require('passport');
 
-const { authRoute, usersRoute } = require('./routes');
+const { authRoute, usersRoute, resourceListRoute } = require('./routes');
 
 const db = require('./db');
 
@@ -25,7 +25,7 @@ app.use(passport.initialize());
 // Routes
 app.use('/auth', authRoute);
 app.use('/user', usersRoute);
-
+app.use('/list', resourceListRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
