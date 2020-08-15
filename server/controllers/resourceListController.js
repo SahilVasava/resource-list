@@ -18,5 +18,19 @@ module.exports = {
         } catch (error) {
             next(error)
         }
+    },
+
+    /* 
+    ** Get all ResourceList
+    */
+    getAllResList: async (req, res, next) => {
+        try {
+
+            let reslists = await ResourceList.find({}).populate('createdBy', 'name img');
+            res.status(200).json({ success: true, reslists });
+
+        } catch (error) {
+            next(error)
+        }
     }
 }

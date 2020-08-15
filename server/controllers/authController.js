@@ -8,7 +8,8 @@ module.exports = {
         try {
 
 
-            let user = await User.findOne({ 'google.id': req.user.id });
+            let user = await User.findOne({ 'googleId': req.user.id });
+            // let user = await User.findOne({ 'google.id': req.user.id });
             if (user) {
                 console.log('existingUser', user);
 
@@ -16,13 +17,20 @@ module.exports = {
                 // Create a new user if user doesn't exists
                 user = new User({
                     methods: ['google'],
+                    name: req.user.displayName,
+                    email: req.user.emails[0].value,
+                    img: req.user._json.picture,
+                    googleId: req.user.id,
+                })
+                /* user = new User({
+                    methods: ['google'],
                     google: {
                         id: req.user.id,
                         name: req.user.displayName,
                         email: req.user.emails[0].value,
                         img: req.user._json.picture
                     }
-                })
+                }) */
                 await user.save();
                 console.log('newUser', user);
             }

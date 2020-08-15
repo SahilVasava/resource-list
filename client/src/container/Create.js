@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Button, Paper, TextField, Typography, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { Grid, Button, Paper, TextField, Typography, FormControl, InputLabel, Select, MenuItem, Container } from '@material-ui/core';
 import resourceList from '../api/resourceList';
 import { AuthContext } from '../contexts/authContext';
 
@@ -30,7 +30,7 @@ const Create = () => {
     const classes = useStyles();
     const [subject, setSubject] = useState('');
     const [resource, setResource] = useState([]);
-    const { isAuthenticated, token, setToken, setIsAuthenticated } = useContext(AuthContext);
+    const { token } = useContext(AuthContext);
     const handleCatChange = (index, event) => {
         /* let newRes = [...resource];
         newRes[index] = { ...newRes[index], cat: event.target.value }
@@ -82,8 +82,7 @@ const Create = () => {
     }
 
     return (
-        <div>
-
+        <Container fixed>
             <Grid container justify="center" alignItems="center">
                 <Grid item>
                     <Paper variant="outlined" className={classes.paper}>
@@ -163,8 +162,7 @@ const Create = () => {
                     </Paper>
                 </Grid>
             </Grid>
-
-        </div>
+        </Container>
     )
 }
 

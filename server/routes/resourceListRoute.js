@@ -10,5 +10,8 @@ const { validateBody, schemas } = require('../utils/validation');
 router.route('/')
     .post(passportJWT, validateBody(schemas.resourceListSchema), resourceListController.createResList);
 
+// Get all resoucelist
+router.route('/')
+    .get(resourceListController.getAllResList);
 
 const resourceListRoute = module.exports = router;

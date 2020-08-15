@@ -27,6 +27,24 @@ const createList = (data, token) => {
         });
 };
 
+
+const getAllList = (data, token) => {
+
+    return axios
+        .get(
+            API_URL + "list"
+        )
+        .then((response) => {
+
+            /* if (response.data.accessToken) {
+                //localStorage.setItem("user", JSON.stringify(response.data));
+            }
+ */
+            return response.data;
+        });
+};
+
 export default {
-    createList
+    createList,
+    getAllList
 };

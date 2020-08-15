@@ -150,7 +150,7 @@ const NavBar = (props) => {
             <Grid item>
                 <AppBar color="default" position="static">
 
-                    <Toolbar className={classes.toolbar}>
+                    <Toolbar className={classes.toolbar} disableGutters={false}>
 
                         <Button variant="text" component={Link} to="/">
                             <Typography variant="h6" color="inherit" className={classes.title}>
@@ -160,12 +160,14 @@ const NavBar = (props) => {
 
                         <Hidden xsDown implementation="js">
                             <nav className={classes.navbar}>
-                                <Button size="large" className={classes.navButton} component={Link} to="/create">
-                                    Create
-        </Button>
-                                <Button size="large" className={classes.navButton} component={Link} to="/profile">
-                                    Profile
-        </Button>
+                                {isAuthenticated ?
+                                    <Button size="large" className={classes.navButton} component={Link} to="/create">
+                                        Create
+        </Button> : null}
+                                {isAuthenticated ?
+                                    <Button size="large" className={classes.navButton} component={Link} to="/profile">
+                                        Profile
+        </Button> : null}
 
 
                             </nav>

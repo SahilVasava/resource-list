@@ -14,14 +14,36 @@ import { ThemeProvider, unstable_createMuiStrictModeTheme as createMuiTheme } fr
 
 const App = () => {
 
+  // const defaultTheme = createMuiTheme();
   const theme = createMuiTheme({
+    /* mixins: {
+      gutters: (styles = {}) => ({
+        paddingLeft: defaultTheme.spacing.unit * 2,
+        paddingRight: defaultTheme.spacing.unit * 2,
+        ...styles,
+        [defaultTheme.breakpoints.up('sm')]: {
+          paddingLeft: defaultTheme.spacing.unit * 7,
+          paddingRight: defaultTheme.spacing.unit * 7,
+          ...styles[defaultTheme.breakpoints.up('sm')],
+        },
+      }),
+    }, */
     overrides: {
-      MuiAppBar: {
-        /* colorPrimary: {
+      /* MuiAppBar: {
+        colorPrimary: {
           backgroundColor: "#333"
-        } */
+        }
 
-      }
+      }, */
+      /* MuiToolbar: {
+        gutters: {
+          [defaultTheme.breakpoints.up('sm')]: {
+            paddingLeft: '30px',
+            paddingRight: '16px',
+          },
+        },
+      }, */
+
     },
     palette: {
       type: 'dark',
