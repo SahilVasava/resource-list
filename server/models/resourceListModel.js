@@ -23,6 +23,11 @@ const ResourceListSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    urlTitle: {
+        type: String,
+        required: true,
+        unique: true
+    },
     resources: [ResourceSchema],
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,

@@ -11,7 +11,6 @@ const GoogleBtn = (props) => {
     const isXsDown = useMediaQuery(theme.breakpoints.down('xs'));
     const { isAuthenticated, setToken, setIsAuthenticated } = useContext(AuthContext);
 
-
     const login = (loginRes) => {
         props.dialogClose();
         console.log(loginRes);

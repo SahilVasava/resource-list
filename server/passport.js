@@ -15,6 +15,7 @@ passport.use(new GoogleAuthCodeStrategy({
     callbackURL: 'postmessage'
 }, (accessToken, refreshToken, profile, done) => {
     try {
+        console.log(profile)
         done(null, profile);
     } catch (error) {
         done(error, false, error.message);

@@ -4,10 +4,12 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import PrivateRoute from './PrivateRoute';
 import './App.css';
 import { CssBaseline, Grid } from '@material-ui/core/';
 import Home from './container/Home';
 import Create from './container/Create';
+import List from './container/List';
 import NavBar from './components/NavBar';
 import AuthContextProvider from './contexts/authContext';
 import { ThemeProvider, unstable_createMuiStrictModeTheme as createMuiTheme } from '@material-ui/core/styles'
@@ -74,12 +76,9 @@ const App = () => {
             </Grid>
 
             <Switch>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route path="/create">
-                <Create />
-              </Route>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/:username/list/:urlTitle" component={List} />
+              <PrivateRoute path="/create" component={Create} />
             </Switch>
 
           </Router>

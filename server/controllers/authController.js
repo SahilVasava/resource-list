@@ -15,9 +15,11 @@ module.exports = {
 
             } else {
                 // Create a new user if user doesn't exists
+                username = await generateUsername(req.user.displayName);
                 user = new User({
                     methods: ['google'],
                     name: req.user.displayName,
+                    username,
                     email: req.user.emails[0].value,
                     img: req.user._json.picture,
                     googleId: req.user.id,
@@ -43,3 +45,20 @@ module.exports = {
         }
     }
 }
+
+
+/* 
+*Generate Unique username
+*/
+const generateUsername = async (name) => {
+    name = name.replace(/ /g, "").toLowerCase();
+    let username = name;
+    let user = await User.findOne({ username });
+    let number = 0;
+    while (user) {
+        number++;
+        username = `${name}${number}`;
+        user = await User.findOne({ username });
+    }
+    return username;
+} 
