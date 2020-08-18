@@ -27,12 +27,25 @@ router.route('/')
     .get(resourceListController.getAllResList);
 
 // Get single resoucelist
+router.route('/:id')
+    .get(celebrate({
+        [Segments.PARAMS]: {
+            id: Joi.string().regex(/^[0-9a-fA-F]{24}$/)
+        }
+    }),
+        resourceListController.getSingleResList);
+
+
+
+const resourceListRoute = module.exports = router;
+
+
+
+/* // Get single resoucelist
 router.route('/:urlTitle')
     .get(celebrate({
         [Segments.PARAMS]: {
             urlTitle: Joi.string()
         }
     }),
-        resourceListController.getSingleResList);
-
-const resourceListRoute = module.exports = router;
+        resourceListController.getSingleResList); */

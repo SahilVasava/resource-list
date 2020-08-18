@@ -11,6 +11,7 @@ import Home from './container/Home';
 import Create from './container/Create';
 import List from './container/List';
 import NavBar from './components/NavBar';
+import PageNotFound from './components/PageNotFound';
 import AuthContextProvider from './contexts/authContext';
 import { ThemeProvider, unstable_createMuiStrictModeTheme as createMuiTheme } from '@material-ui/core/styles'
 
@@ -77,8 +78,9 @@ const App = () => {
 
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route exact path="/:username/list/:urlTitle" component={List} />
+              <Route exact path="/:username/list/:id" component={List} />
               <PrivateRoute path="/create" component={Create} />
+              <Route path="*" component={PageNotFound} />
             </Switch>
 
           </Router>

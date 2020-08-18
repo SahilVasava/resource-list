@@ -36,7 +36,7 @@ const Home = () => {
                 <Grid item xs={12}>
                     {reslists.map((list) => (
                         <Card className={classes.card} key={list._id}>
-                            <CardActionArea component={Link} to={`${list.createdBy.username}/list/${list.urlTitle}`}>
+                            <CardActionArea component={Link} to={`${list.createdBy.username}/list/${list._id}`}>
                                 <CardHeader
                                     avatar={
                                         <Avatar alt={list.createdBy.name} src={list.createdBy.img} className={classes.avatar}>

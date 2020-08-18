@@ -1,22 +1,25 @@
 import React, { useEffect } from 'react';
 import { useParams } from "react-router";
+import { Redirect } from "react-router-dom";
 import resourceList from '../api/resourceList';
+import PageNotFound from '../components/PageNotFound';
 
 const List = () => {
-    let { urlTitle } = useParams();
+    let { id } = useParams();
 
     useEffect(() => {
-        console.log(urlTitle)
-        resourceList.getSingleList(urlTitle)
+        resourceList.getSingleList(id)
             .then((res) => {
                 console.log(res);
+            }).catch((err) => {
+                return <Redirect component={PageNotFound} />
             });
 
-    }, [urlTitle]);
+    }, [id]);
 
     return (
         <div>
-            List: {urlTitle}
+            List: {id}
         </div>
     );
 }

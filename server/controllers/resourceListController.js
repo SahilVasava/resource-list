@@ -40,9 +40,9 @@ module.exports = {
     */
     getSingleResList: async (req, res, next) => {
         try {
-            let urlTitle = req.params.urlTitle;
-            console.log(urlTitle)
-            let reslist = await ResourceList.findOne({ urlTitle }).populate('createdBy', 'name username img');
+            // let urlTitle = req.params.urlTitle;
+            let id = req.params.id;
+            let reslist = await ResourceList.findById(id).populate('createdBy', 'name username img');
             res.status(200).json({ success: true, reslist });
 
         } catch (error) {
